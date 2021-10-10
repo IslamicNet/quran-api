@@ -1,7 +1,7 @@
 {
-  "name": "typescript-rest-starter",
+  "name": "quran-api",
   "version": "1.0.0",
-  "description": "Typescript REST starter",
+  "description": "Quran API",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev src/index.ts",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AxeemHaider/typescript-rest-starter.git"
+    "url": "git+https://github.com/IslamicNet/quran-api.git"
   },
-  "author": "AzeemHaider",
+  "author": "OctaByte",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/AxeemHaider/typescript-rest-starter/issues"
+    "url": "https://github.com/IslamicNet/quran-api/issues"
   },
-  "homepage": "https://github.com/AxeemHaider/typescript-rest-starter#readme",
+  "homepage": "https://github.com/IslamicNet/quran-api#readme",
   "dependencies": {
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",

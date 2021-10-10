@@ -4,9 +4,21 @@ import { plainToClass } from "class-transformer";
 import BadRequest from "../error/BadRequest.error";
 
 const validateRequest = (DtoClass: any) => {
-  return (req: Request, res: Response, next?: NextFunction) => {
+  return (req: Request, _: Response, next?: NextFunction) => {
     try {
-      const requestDto = plainToClass(DtoClass, req.body);
+      let requestParams = req.body;
+      let validationFrom = "body";
+
+      if (!Object.keys(req.body).length) {
+        if (Object.keys(req.query).length) {
+          requestParams = req.query;
+          validationFrom = "query";
+        } else {
+          validationFrom = "body-and-query";
+        }
+      }
+
+      const requestDto = plainToClass(DtoClass, requestParams);
 
       const errors = validateSync(requestDto);
 
@@ -18,7 +30,8 @@ const validateRequest = (DtoClass: any) => {
 
         const err = new BadRequest("Bad Request! Invalid request params");
         err.invalidParams = invalidParams;
-        err.requestBody = req.body;
+        err.requestBody = requestParams;
+        err.validationFrom = validationFrom;
         next(err);
       }
     } catch (e) {

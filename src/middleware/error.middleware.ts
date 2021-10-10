@@ -1,12 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../error/HttpError.error";
 
-const errorMiddleware = (
-  err,
-  req: Request,
-  res: Response,
-  next?: NextFunction
-) => {
+const errorMiddleware = (err, _: Request, res: Response, __?: NextFunction) => {
   console.error(err);
 
   if (err instanceof HttpError) {

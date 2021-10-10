@@ -1,5 +1,5 @@
-import { Request } from "express";
-import { Response } from "express-serve-static-core";
+import { plainToClass } from "class-transformer";
+import { Request, Response } from "express";
 import { Service as AutoInjection } from "typedi";
 import MessageDTO from "../dto/request/Message.dto";
 import validateRequest from "../middleware/requestValidator.middleware";
@@ -21,9 +21,25 @@ class WelcomeController extends BaseController {
       validateRequest(MessageDTO)
     );
     this.addEndpoint("GET", "/hello-from-repo", this.helloFromRepo);
+    this.addEndpoint("GET", "/reply", this.reply, validateRequest(MessageDTO));
+    this.addEndpoint("GET", "/error-test", this.errorTest);
   }
 
-  private helloFromRepo = (req: Request, res: Response) => {
+  private errorTest = () => {
+    this.welcomeService.errorTest();
+
+    return "should not see";
+  };
+
+  private reply = (req: Request) => {
+    const messageDTO: MessageDTO = plainToClass(MessageDTO, req.query);
+
+    const message = this.welcomeService.reply(messageDTO);
+
+    return message;
+  };
+
+  private helloFromRepo = () => {
     const message = this.welcomeService.helloFromRepo();
 
     return message;

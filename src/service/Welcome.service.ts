@@ -7,11 +7,24 @@ export interface IWelcomeService {
   hello(): WelcomeDTO;
   saySomething(message: MessageDTO): WelcomeDTO;
   helloFromRepo(): WelcomeDTO;
+  reply(message: MessageDTO): WelcomeDTO;
+  errorTest(): string;
 }
 
 @AutoInjection()
 export class WelcomeService implements IWelcomeService {
   public constructor(private readonly welcomeRepo: WelcomeRepo) {}
+
+  errorTest(): string {
+    throw new Error("Error Test");
+  }
+
+  reply(message: MessageDTO): WelcomeDTO {
+    const welcome = new WelcomeDTO();
+    welcome.message = message.text;
+
+    return welcome;
+  }
 
   helloFromRepo(): WelcomeDTO {
     const repoText = this.welcomeRepo.getText();

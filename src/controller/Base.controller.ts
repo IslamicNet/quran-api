@@ -13,6 +13,24 @@ abstract class BaseController {
 
   protected abstract initializeEndpoints(): void;
 
+  private response = (
+    fn: (req: Request, res: Response, next?: NextFunction) => any | Promise<any>
+  ) => {
+    return (req: Request, res: Response, next?: NextFunction) => {
+      // Execute function if this function is Async type then
+      // it will return Promise otherwise results;
+      const exec = fn(req, res, next);
+
+      if (exec instanceof Promise) {
+        exec.then((result) => {
+          res.status(200).json(result);
+        });
+      } else {
+        res.status(200).json(exec);
+      }
+    };
+  };
+
   public addEndpoint(
     httpMethod: string,
     route: string,
@@ -26,23 +44,23 @@ abstract class BaseController {
     switch (httpMethod) {
       case "GET":
         middlewares
-          ? this.app.get(route, middlewares, fn)
-          : this.app.get(route, fn);
+          ? this.app.get(route, middlewares, this.response(fn))
+          : this.app.get(route, this.response(fn));
         break;
       case "POST":
         middlewares
-          ? this.app.post(route, middlewares, fn)
-          : this.app.post(route, fn);
+          ? this.app.post(route, middlewares, this.response(fn))
+          : this.app.post(route, this.response(fn));
         break;
       case "PUT":
         middlewares
-          ? this.app.put(route, middlewares, fn)
-          : this.app.put(route, fn);
+          ? this.app.put(route, middlewares, this.response(fn))
+          : this.app.put(route, this.response(fn));
         break;
       case "DELETE":
         middlewares
-          ? this.app.delete(route, middlewares, fn)
-          : this.app.delete(route, fn);
+          ? this.app.delete(route, middlewares, this.response(fn))
+          : this.app.delete(route, this.response(fn));
         break;
     }
   }

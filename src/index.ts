@@ -4,6 +4,8 @@ import express from "express";
 
 import AppBuilder from "./appBuilder";
 import errorMiddleware from "./middleware/error.middleware";
+import urlNotFoundMiddleWare from "./middleware/urlNotFound.middleware";
+import corsMiddleware from "./middleware/cors.middleware";
 
 dotenv.config();
 const app = express();
@@ -14,6 +16,8 @@ const portNumber = parseInt(port);
 
 appBuilder
   .addMiddleware(express.json())
+  .addMiddleware(corsMiddleware())
   .initializeControllers()
+  .addMiddleware(urlNotFoundMiddleWare)
   .addMiddleware(errorMiddleware)
   .build(portNumber, () => console.log("Listing on Port", portNumber));

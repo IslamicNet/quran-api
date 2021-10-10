@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import HttpError from "../error/HttpError";
+import HttpError from "../error/HttpError.error";
 
 const errorMiddleware = (
   err,
@@ -7,13 +7,15 @@ const errorMiddleware = (
   res: Response,
   next?: NextFunction
 ) => {
+  console.error(err);
+
   if (err instanceof HttpError) {
     const httpError: HttpError = <HttpError>err;
 
     res.status(httpError.statusCode).json({
       error: {
         statusCode: httpError.statusCode,
-        message: err.message,
+        ...httpError,
       },
     });
 

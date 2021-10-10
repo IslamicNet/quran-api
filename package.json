@@ -1,7 +1,7 @@
 {
-  "name": "rerespond-backend",
+  "name": "typescript-rest-starter",
   "version": "1.0.0",
-  "description": "Backend for ReRespond",
+  "description": "Typescript REST starter",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev src/index.ts",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ReRespond/rerespond-backend.git"
+    "url": "git+https://github.com/AxeemHaider/typescript-rest-starter.git"
   },
-  "author": "OctaByte",
+  "author": "AzeemHaider",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ReRespond/rerespond-backend/issues"
+    "url": "https://github.com/AxeemHaider/typescript-rest-starter/issues"
   },
-  "homepage": "https://github.com/ReRespond/rerespond-backend#readme",
+  "homepage": "https://github.com/AxeemHaider/typescript-rest-starter#readme",
   "dependencies": {
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",

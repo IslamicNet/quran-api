@@ -1,16 +1,45 @@
+import { Request } from "express";
 import { Service as AutoInjection } from "typedi";
-import SurahService from "../service/SurahService.service";
+import AyahDTO from "../dto/response/Ayah.dto";
+import SurahDTO from "../dto/response/Surah.dto";
+import AyahService from "../service/Ayah.service";
+import SurahService from "../service/Surah.service";
 import BaseController from "./Base.controller";
 
 @AutoInjection()
 class SurahController extends BaseController {
-  public constructor(private readonly surahService: SurahService) {
+  public constructor(
+    private readonly surahService: SurahService,
+    private readonly ayahService: AyahService
+  ) {
     super();
   }
 
   protected initializeEndpoints(): void {
+    this.asyncEndpoint("GET", "/surahs/:surahNumber", this.getSurah);
     this.endpoint("GET", "/surahs", this.getSurahList);
   }
+
+  private getSurah = async (req: Request) => {
+    const surahNumber: number = parseInt(req.params.surahNumber);
+    const page: number = parseInt(<string>req.query.page) || 0;
+
+    const ayahList: AyahDTO[] = await this.ayahService.getSurahAyahByPage(
+      surahNumber,
+      page
+    );
+
+    const surah: SurahDTO = await this.surahService.getSurahBySurahNumber(
+      surahNumber
+    );
+
+    return {
+      ayahs: ayahList,
+      surah: surah,
+      nextPage: page + 1,
+      prevPage: page - 1,
+    };
+  };
 
   /*
    * @openapi

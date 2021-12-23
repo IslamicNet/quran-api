@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["middlewares", "Octa", "openapi", "Surahs", "typedi"]
+  "cSpell.words": [
+    "middlewares",
+    "Octa",
+    "openapi",
+    "Surahs",
+    "typedi",
+    "typeorm"
+  ]
 }

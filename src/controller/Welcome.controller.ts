@@ -15,7 +15,7 @@ class WelcomeController extends BaseController {
   protected initializeEndpoints(): void {
     this.addEndpoint("GET", "/welcome", this.welcome);
     this.addEndpoint(
-      "GET",
+      "POST",
       "/say",
       this.saySomething,
       validateRequest(MessageDTO)
@@ -23,10 +23,17 @@ class WelcomeController extends BaseController {
     this.addEndpoint("GET", "/hello-from-repo", this.helloFromRepo);
     this.addEndpoint("GET", "/reply", this.reply, validateRequest(MessageDTO));
     this.addEndpoint("GET", "/error-test", this.errorTest);
+    this.addAsyncEndpoint("GET", "/error-test-async", this.errorTestAsync);
   }
 
   private errorTest = () => {
     this.welcomeService.errorTest();
+
+    return "should not see";
+  };
+
+  private errorTestAsync = async () => {
+    await this.welcomeService.asyncErrorTest();
 
     return "should not see";
   };
@@ -45,12 +52,49 @@ class WelcomeController extends BaseController {
     return message;
   };
 
+  /**
+   * @openapi
+   * /welcome:
+   *  get:
+   *    tags:
+   *      - Welcome
+   *    summary: Welcome message
+   *    responses:
+   *      200:
+   *        description: Return a welcome string
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/Welcome'
+   */
   private welcome = (req: Request, res: Response) => {
     const message = this.welcomeService.hello();
 
     return message;
   };
 
+  /**
+   * @openapi
+   * /say:
+   *   post:
+   *     tags:
+   *        - Welcome
+   *     summary: Say something
+   *     description: Welcome to API
+   *     requestBody:
+   *        description: Request body description
+   *        content:
+   *          application/json:
+   *             schema:
+   *                $ref: '#/components/schemas/Message'
+   *     responses:
+   *       200:
+   *         description: Returns a mysterious string.
+   *         content:
+   *            application/json:
+   *                schema:
+   *                    $ref: '#/components/schemas/Welcome'
+   */
   private saySomething = (req: Request, res: Response) => {
     const body: MessageDTO = req.body;
 

@@ -12,20 +12,20 @@ class SurahController extends BaseController {
     this.endpoint("GET", "/surahs", this.getSurahList);
   }
 
-  /**
+  /*
    * @openapi
    * /surahs:
-   *    get:
-   *        tags:
-   *            - Surah
-   *        summary: Get Surah List of Quran
-   *        responses:
-   *            200:
-   *                description: Return list of Surahs
-   *                content:
-   *                    application/json:
-   *                        schema:
-   *                            $ref: '#/components/schemas/Surah'
+   *   get:
+   *     tags:
+   *       - Surah
+   *     summary: Get Surah List of Quran
+   *     responses:
+   *       200:
+   *         description: Return list of Surahs
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Surah'
    */
   private getSurahList = () => {
     return this.surahService.getSurahList();

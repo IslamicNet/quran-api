@@ -22,7 +22,7 @@ class SurahController extends BaseController {
 
   private getSurah = async (req: Request) => {
     const surahNumber: number = parseInt(req.params.surahNumber);
-    const page: number = parseInt(<string>req.query.page) || 0;
+    const page: number = parseInt(<string>req.query.page) || 1;
 
     const ayahList: AyahDTO[] = await this.ayahService.getSurahAyahByPage(
       surahNumber,

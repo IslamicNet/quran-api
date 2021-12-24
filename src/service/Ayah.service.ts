@@ -25,15 +25,13 @@ class AyahService implements IAyahService {
    */
   async getSurahAyahByPage(
     surahNumber: number,
-    page: number = 0
+    page: number = 1
   ): Promise<AyahDTO[]> {
     const limit = 20;
-    const from = page * limit;
+    const from = (page - 1) * limit;
 
-    const ayahList: AyahDTO[] = await this.ayahRepo.getSurahAyahs(
-      surahNumber,
-      from,
-      limit
+    const ayahList: AyahDTO[] = <AyahDTO[]>(
+      classToClass(await this.ayahRepo.getSurahAyahs(surahNumber, from, limit))
     );
     return ayahList;
   }
@@ -50,10 +48,8 @@ class AyahService implements IAyahService {
     from: number = 0,
     limit: number = 20
   ): Promise<AyahDTO[]> {
-    const ayahList: AyahDTO[] = await this.ayahRepo.getSurahAyahs(
-      surahNumber,
-      from,
-      limit
+    const ayahList: AyahDTO[] = <AyahDTO[]>(
+      classToClass(await this.ayahRepo.getSurahAyahs(surahNumber, from, limit))
     );
     return ayahList;
   }
@@ -64,7 +60,9 @@ class AyahService implements IAyahService {
    * @returns
    */
   async getAyahById(ayahId: string): Promise<AyahDTO> {
-    const ayah: AyahDTO = classToClass(await this.ayahRepo.getAyahById(ayahId));
+    const ayah: AyahDTO = <AyahDTO>(
+      classToClass(await this.ayahRepo.getAyahById(ayahId))
+    );
     return ayah;
   }
 }

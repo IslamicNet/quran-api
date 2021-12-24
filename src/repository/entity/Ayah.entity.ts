@@ -13,7 +13,7 @@ class Translations {
 class AyahEntity {
   @ObjectIdColumn()
   @Transform(({ value }) => value.toString())
-  id: ObjectID; // uci will be the default id of every Ayah
+  id: ObjectID | string; // uci will be the default id of every Ayah
 
   @Column()
   ayahId: string;

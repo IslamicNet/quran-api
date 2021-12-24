@@ -9,7 +9,7 @@ class Translations {
   english: string;
 }
 
-@Entity()
+@Entity({ name: "quran" })
 class AyahEntity {
   @ObjectIdColumn()
   @Transform(({ value }) => value.toString())

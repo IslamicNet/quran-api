@@ -16,36 +16,36 @@ class AyahController extends BaseController {
   }
 
   protected initializeEndpoints(): void {
-    this.asyncEndpoint("GET", "/ayahs/:surahNumber", this.getAyahPortion);
+    this.asyncEndpoint("GET", "/ayahs/portion", this.getAyahPortion);
     this.asyncEndpoint("GET", "/ayahs/:id", this.getAyahById);
   }
 
   /**
    * @openapi
-   * /ayahs/{surahNumber}:
+   * /ayahs/portion:
    *   get:
    *     tags:
-   *       - Surah
+   *       - Ayah
    *     summary: Get Surah List of Quran
    *     parameters:
    *       - name: surahNumber
-   *         in: path
+   *         in: query
    *         required: true
    *         description: Surah number in Quran
    *         schema:
    *           type: number
    *       - name: from
-   *          in: query
-   *          required: true
-   *          description: Start ayahs from
-   *          schema:
-   *            type: number
+   *         in: query
+   *         required: true
+   *         description: Start ayahs from
+   *         schema:
+   *           type: number
    *       - name: to
-   *          in: query
-   *          required: true
-   *          description: End ayahs on
-   *          schema:
-   *            type: number
+   *         in: query
+   *         required: true
+   *         description: End ayahs on
+   *         schema:
+   *           type: number
    *     responses:
    *       200:
    *         description: Return list of Surahs
@@ -62,10 +62,10 @@ class AyahController extends BaseController {
    *                   $ref: '#/components/schemas/Surah'
    */
   private getAyahPortion = async (req: Request) => {
-    const surahNumber = parseInt(req.params.surahNumber);
+    const surahNumber = parseInt(<string>req.query.surahNumber);
     const from = parseInt(<string>req.query.from);
     const to = parseInt(<string>req.query.to);
-    const limit = to - from;
+    const limit = to - from + 1;
 
     const ayahList: AyahDTO[] = await this.ayahService.getSurahAyahs(
       surahNumber,
@@ -85,6 +85,13 @@ class AyahController extends BaseController {
    *     tags:
    *       - Ayah
    *     summary: Get Ayah by id
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         required: true
+   *         description: Ayah id combination of surah number and ayah number (1-1)
+   *         schema:
+   *           type: string
    *     responses:
    *       200:
    *         description: Return Ayah

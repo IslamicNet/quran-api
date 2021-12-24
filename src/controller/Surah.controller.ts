@@ -20,6 +20,39 @@ class SurahController extends BaseController {
     this.endpoint("GET", "/surahs", this.getSurahList);
   }
 
+  /**
+   * @openapi
+   * /surahs/{surahNumber}:
+   *   get:
+   *     tags:
+   *       - Surah
+   *     summary: Get Surah List of Quran
+   *     parameters:
+   *       - name: surahNumber
+   *         in: path
+   *         required: true
+   *         description: Surah number in Quran
+   *         schema:
+   *           type: number
+   *     responses:
+   *       200:
+   *         description: Return list of Surahs
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 ayahs:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Ayah'
+   *                 surah:
+   *                   $ref: '#/components/schemas/Surah'
+   *                 nextPage:
+   *                   type: number
+   *                 prevPage:
+   *                   type: number
+   */
   private getSurah = async (req: Request) => {
     const surahNumber: number = parseInt(req.params.surahNumber);
     const page: number = parseInt(<string>req.query.page) || 1;
@@ -41,7 +74,7 @@ class SurahController extends BaseController {
     };
   };
 
-  /*
+  /**
    * @openapi
    * /surahs:
    *   get:
@@ -54,7 +87,9 @@ class SurahController extends BaseController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Surah'
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Surah'
    */
   private getSurahList = () => {
     return this.surahService.getSurahList();

@@ -62,9 +62,8 @@ class SurahController extends BaseController {
       page
     );
 
-    const surah: SurahDTO = await this.surahService.getSurahBySurahNumber(
-      surahNumber
-    );
+    const surah: SurahDTO =
+      this.surahService.getSurahBySurahNumber(surahNumber);
 
     return {
       ayahs: ayahList,

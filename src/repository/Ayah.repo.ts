@@ -5,6 +5,11 @@ import AyahEntity from "./entity/Ayah.entity";
 
 interface IAyahRepo {
   countSurahAyahs(surahNumber: number): Promise<number>;
+  getAyahPortion(
+    surahNumber: number,
+    from: number,
+    to: number
+  ): Promise<AyahEntity[]>;
   getSurahAyahs(
     surahNumber: number,
     from: number,
@@ -31,6 +36,25 @@ class AyahRepo implements IAyahRepo {
       surahNumber: surahNumber,
     });
     return totalAyahs;
+  }
+
+  /**
+   * Get Ayah Portion
+   * @param surahNumber
+   * @param from
+   * @param to
+   * @returns
+   */
+  async getAyahPortion(
+    surahNumber: number,
+    from: number,
+    to: number
+  ): Promise<AyahEntity[]> {
+    const ayahList: AyahEntity[] = await this.repo.find({
+      where: { surahNumber: surahNumber, number: { $gte: from, $lte: to } },
+    });
+
+    return ayahList;
   }
 
   /**

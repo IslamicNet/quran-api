@@ -8,10 +8,10 @@ interface IAyahService {
     surahNumber: number,
     page?: number
   ): Promise<[AyahDTO[], number]>;
-  getSurahAyahs(
+  getAyahPortion(
     surahNumber: number,
     from?: number,
-    limit?: number
+    to?: number
   ): Promise<AyahDTO[]>;
   getAyahById(ayahId: string): Promise<AyahDTO>;
 }
@@ -45,16 +45,16 @@ class AyahService implements IAyahService {
    * Get surah ayah portion
    * @param surahNumber
    * @param from
-   * @param limit
+   * @param to
    * @returns
    */
-  async getSurahAyahs(
+  async getAyahPortion(
     surahNumber: number,
     from: number = 0,
-    limit: number = 20
+    to: number = 20
   ): Promise<AyahDTO[]> {
     const ayahList: AyahDTO[] = <AyahDTO[]>(
-      classToClass(await this.ayahRepo.getSurahAyahs(surahNumber, from, limit))
+      classToClass(await this.ayahRepo.getAyahPortion(surahNumber, from, to))
     );
     return ayahList;
   }

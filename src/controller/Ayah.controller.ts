@@ -65,12 +65,11 @@ class AyahController extends BaseController {
     const surahNumber = parseInt(<string>req.query.surahNumber);
     const from = parseInt(<string>req.query.from);
     const to = parseInt(<string>req.query.to);
-    const limit = to - from + 1;
 
-    const ayahList: AyahDTO[] = await this.ayahService.getSurahAyahs(
+    const ayahList: AyahDTO[] = await this.ayahService.getAyahPortion(
       surahNumber,
       from,
-      limit
+      to
     );
     const surah: SurahDTO =
       this.surahService.getSurahBySurahNumber(surahNumber);

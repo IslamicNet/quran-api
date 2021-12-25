@@ -4,6 +4,7 @@ import Database from "../database";
 import AyahEntity from "./entity/Ayah.entity";
 
 interface IAyahRepo {
+  countSurahAyahs(surahNumber: number): Promise<number>;
   getSurahAyahs(
     surahNumber: number,
     from: number,
@@ -18,6 +19,18 @@ class AyahRepo implements IAyahRepo {
 
   public constructor() {
     this.repo = Database.getRepository(AyahEntity);
+  }
+
+  /**
+   * Return total ayahs
+   * @param surahNumber
+   * @returns
+   */
+  async countSurahAyahs(surahNumber: number): Promise<number> {
+    const totalAyahs: number = await this.repo.count({
+      surahNumber: surahNumber,
+    });
+    return totalAyahs;
   }
 
   /**

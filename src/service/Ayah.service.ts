@@ -4,7 +4,10 @@ import AyahDTO from "../dto/response/Ayah.dto";
 import AyahRepo from "../repository/Ayah.repo";
 
 interface IAyahService {
-  getSurahAyahByPage(surahNumber: number, page?: number): Promise<AyahDTO[]>;
+  getSurahAyahByPage(
+    surahNumber: number,
+    page?: number
+  ): Promise<[AyahDTO[], number]>;
   getSurahAyahs(
     surahNumber: number,
     from?: number,
@@ -18,22 +21,24 @@ class AyahService implements IAyahService {
   public constructor(private readonly ayahRepo: AyahRepo) {}
 
   /**
-   * Get surah ayah by page number
+   * Get ayahs and total ayahs in surah
    * @param surahNumber
    * @param page
-   * @returns
+   * @returns Array [AyahDTO[], totalAyahs]
    */
   async getSurahAyahByPage(
     surahNumber: number,
     page: number = 1
-  ): Promise<AyahDTO[]> {
+  ): Promise<[AyahDTO[], number]> {
     const limit = 20;
     const from = (page - 1) * limit;
 
     const ayahList: AyahDTO[] = <AyahDTO[]>(
       classToClass(await this.ayahRepo.getSurahAyahs(surahNumber, from, limit))
     );
-    return ayahList;
+    const totalAyahs: number = await this.ayahRepo.countSurahAyahs(surahNumber);
+
+    return [ayahList, totalAyahs];
   }
 
   /**

@@ -57,19 +57,21 @@ class SurahController extends BaseController {
     const surahNumber: number = parseInt(req.params.surahNumber);
     const page: number = parseInt(<string>req.query.page) || 1;
 
-    const ayahList: AyahDTO[] = await this.ayahService.getSurahAyahByPage(
-      surahNumber,
-      page
-    );
-
     const surah: SurahDTO =
       this.surahService.getSurahBySurahNumber(surahNumber);
+
+    const [ayahList, totalAyahs]: [AyahDTO[], number] =
+      await this.ayahService.getSurahAyahByPage(surahNumber, page);
+
+    const limit = 20;
+    const nextPage = page * limit < totalAyahs ? page + 1 : undefined;
+    const prevPage = page > 1 ? page - 1 : undefined;
 
     return {
       ayahs: ayahList,
       surah: surah,
-      nextPage: page + 1,
-      prevPage: page - 1,
+      nextPage: nextPage,
+      prevPage: prevPage,
     };
   };
 

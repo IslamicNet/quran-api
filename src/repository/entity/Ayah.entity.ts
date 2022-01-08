@@ -1,4 +1,3 @@
-import { Transform } from "class-transformer";
 import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
 
 class Translations {
@@ -11,8 +10,9 @@ class Translations {
 
 @Entity({ name: "quran" })
 class AyahEntity {
+  _id: string;
+
   @ObjectIdColumn()
-  @Transform(({ value }) => value.toString())
   id: ObjectID | string; // uci will be the default id of every Ayah
 
   @Column()

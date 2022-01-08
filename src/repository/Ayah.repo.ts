@@ -1,6 +1,7 @@
 import { Service as AutoInjection } from "typedi";
 import { MongoRepository } from "typeorm";
 import Database from "../database";
+import NotFound from "../error/NotFound.error";
 import AyahEntity from "./entity/Ayah.entity";
 
 interface IAyahRepo {
@@ -85,6 +86,9 @@ class AyahRepo implements IAyahRepo {
    */
   async getAyahById(ayahId: string): Promise<AyahEntity> {
     const ayah: AyahEntity = await this.repo.findOne({ ayahId: ayahId });
+
+    if (!ayah) throw new NotFound(`No Ayah found against id: ${ayahId}`);
+
     return ayah;
   }
 }

@@ -1,5 +1,8 @@
+import { plainToClass } from "class-transformer";
 import { Request } from "express";
 import { Service as AutoInjection } from "typedi";
+import GetSuarhAyahsDTO from "../dto/request/GetSurahAyahs.dto";
+import GetSurahAyahsDTO from "../dto/request/GetSurahAyahs.dto";
 import AyahDTO from "../dto/response/Ayah.dto";
 import SurahDTO from "../dto/response/Surah.dto";
 import AyahService from "../service/Ayah.service";
@@ -16,7 +19,12 @@ class SurahController extends BaseController {
   }
 
   protected initializeEndpoints(): void {
-    this.asyncEndpoint("GET", "/surahs/:surahNumber", this.getSurah);
+    this.asyncEndpoint(
+      "GET",
+      "/surahs/:surahNumber",
+      this.getSurah,
+      GetSurahAyahsDTO
+    );
     this.endpoint("GET", "/surahs", this.getSurahList);
   }
 
@@ -54,18 +62,25 @@ class SurahController extends BaseController {
    *                   type: number
    */
   private getSurah = async (req: Request) => {
-    const surahNumber: number = parseInt(req.params.surahNumber);
-    const page: number = parseInt(<string>req.query.page) || 1;
+    const parameters: GetSuarhAyahsDTO = plainToClass(GetSuarhAyahsDTO, {
+      ...req.params,
+      ...req.query,
+    });
 
-    const surah: SurahDTO =
-      this.surahService.getSurahBySurahNumber(surahNumber);
+    const surah: SurahDTO = this.surahService.getSurahBySurahNumber(
+      parameters.surahNumber
+    );
 
     const [ayahList, totalAyahs]: [AyahDTO[], number] =
-      await this.ayahService.getSurahAyahByPage(surahNumber, page);
+      await this.ayahService.getSurahAyahByPage(
+        parameters.surahNumber,
+        parameters.page
+      );
 
     const limit = 20;
-    const nextPage = page * limit < totalAyahs ? page + 1 : undefined;
-    const prevPage = page > 1 ? page - 1 : undefined;
+    const nextPage =
+      parameters.page * limit < totalAyahs ? parameters.page + 1 : undefined;
+    const prevPage = parameters.page > 1 ? parameters.page - 1 : undefined;
 
     return {
       ayahs: ayahList,

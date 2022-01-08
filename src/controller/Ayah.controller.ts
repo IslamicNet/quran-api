@@ -1,5 +1,8 @@
+import { plainToClass } from "class-transformer";
 import { Request } from "express";
 import { Service as AutoInjection } from "typedi";
+import AyahIdDTO from "../dto/request/AyahId.dto";
+import GetAyahPortionDTO from "../dto/request/GetAyahPortion.dto";
 import AyahDTO from "../dto/response/Ayah.dto";
 import SurahDTO from "../dto/response/Surah.dto";
 import AyahService from "../service/Ayah.service";
@@ -16,8 +19,13 @@ class AyahController extends BaseController {
   }
 
   protected initializeEndpoints(): void {
-    this.asyncEndpoint("GET", "/ayahs/portion", this.getAyahPortion);
-    this.asyncEndpoint("GET", "/ayahs/:id", this.getAyahById);
+    this.asyncEndpoint(
+      "GET",
+      "/ayahs/portion",
+      this.getAyahPortion,
+      GetAyahPortionDTO
+    );
+    this.asyncEndpoint("GET", "/ayahs/:id", this.getAyahById, AyahIdDTO);
   }
 
   /**
@@ -62,17 +70,19 @@ class AyahController extends BaseController {
    *                   $ref: '#/components/schemas/Surah'
    */
   private getAyahPortion = async (req: Request) => {
-    const surahNumber = parseInt(<string>req.query.surahNumber);
-    const from = parseInt(<string>req.query.from);
-    const to = parseInt(<string>req.query.to);
+    const ayahPortion: GetAyahPortionDTO = plainToClass(
+      GetAyahPortionDTO,
+      req.query
+    );
 
     const ayahList: AyahDTO[] = await this.ayahService.getAyahPortion(
-      surahNumber,
-      from,
-      to
+      ayahPortion.surahNumber,
+      ayahPortion.from,
+      ayahPortion.to
     );
-    const surah: SurahDTO =
-      this.surahService.getSurahBySurahNumber(surahNumber);
+    const surah: SurahDTO = this.surahService.getSurahBySurahNumber(
+      ayahPortion.surahNumber
+    );
 
     return { ayahs: ayahList, surah: surah };
   };
@@ -100,8 +110,8 @@ class AyahController extends BaseController {
    *                 $ref: '#/components/schemas/Ayah'
    */
   private getAyahById = async (req: Request) => {
-    const ayahId = req.params.id;
-    const ayah: AyahDTO = await this.ayahService.getAyahById(ayahId);
+    const params: AyahIdDTO = plainToClass(AyahIdDTO, req.params);
+    const ayah: AyahDTO = await this.ayahService.getAyahById(params.id);
     return ayah;
   };
 }

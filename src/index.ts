@@ -20,7 +20,7 @@ Database.initialize().then(() => {
     .addMiddleware(express.json())
     .addMiddleware(corsMiddleware())
     .initializeControllers()
-    // .enableOpenapiDocs()
+    .enableOpenapiDocs()
     .addMiddleware(urlNotFoundMiddleWare)
     .addMiddleware(errorMiddleware)
     .build(portNumber, () => console.log("Listing on Port", portNumber));

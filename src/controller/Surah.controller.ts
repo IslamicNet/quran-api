@@ -34,7 +34,7 @@ class SurahController extends BaseController {
    *   get:
    *     tags:
    *       - Surah
-   *     summary: Get Surah List of Quran
+   *     summary: Get Surah from Quran
    *     parameters:
    *       - name: surahNumber
    *         in: path
@@ -44,7 +44,7 @@ class SurahController extends BaseController {
    *           type: number
    *     responses:
    *       200:
-   *         description: Return list of Surahs
+   *         description: Return Surah
    *         content:
    *           application/json:
    *             schema:

@@ -34,7 +34,7 @@ class AyahController extends BaseController {
    *   get:
    *     tags:
    *       - Ayah
-   *     summary: Get Surah List of Quran
+   *     summary: Get surah portion
    *     parameters:
    *       - name: surahNumber
    *         in: query
@@ -56,7 +56,7 @@ class AyahController extends BaseController {
    *           type: number
    *     responses:
    *       200:
-   *         description: Return list of Surahs
+   *         description: Return ayahs portion from any surah
    *         content:
    *           application/json:
    *             schema:
